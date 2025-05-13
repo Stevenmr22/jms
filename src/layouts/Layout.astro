@@ -1,0 +1,74 @@
+---
+import '@fontsource-variable/montserrat';
+import { ClientRouter } from 'astro:transitions';
+import Background from './Background.astro';
+import Footer from './Footer.astro';
+import Header from './Header.astro';
+
+interface Props {
+	title: string;
+	description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="es" class="scroll-smooth">
+    <head>
+        <ClientRouter />
+        <meta charset="UTF-8" />
+        <meta name="description" content={description} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+        <meta name="generator" content={Astro.generator} />
+        <title>{title}</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
+    </head>
+    <body class="bg-main-white flex flex-col min-h-screen">
+        <Background />
+        <Header />
+        <main class="flex-grow flex flex-col">
+            <slot />
+        </main>
+        <Footer />
+    </body>
+</html>
+<style is:global>
+    @import url("https://fonts.cdnfonts.com/css/premier-2019");
+
+    :root {
+        color-scheme: light;
+    }
+    html {
+        font-family: "Montserrat Variable", sans-serif;
+    }
+    body {
+        overflow-x: hidden;
+    }
+
+    h1, h2, h3 {
+        font-family: "Premier 2019", sans-serif;
+        font-weight: 100;
+    }
+
+    /* Responsive typography */
+    h1 {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+    }
+    h2 {
+        font-size: clamp(1.5rem, 4vw, 2.5rem);
+    }
+    h3 {
+        font-size: clamp(1.25rem, 3vw, 2rem);
+    }
+    p {
+        font-size: clamp(1rem, 2vw, 1.125rem);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
+</style>

@@ -1,0 +1,39 @@
+<!-- Hero Section -->
+<section class="relative min-h-screen overflow-hidden mt-[72px] sm:mt-[80px] md:mt-[88px]">
+    <!-- Full-height background image -->
+    <div class="absolute inset-0">
+        <img 
+            src="/img/hero/hero.png"
+            alt="Terminación de construcción de alta calidad"
+            class="w-full h-full object-cover"
+            loading="eager"
+            fetchpriority="high"
+        />
+        <!-- Dark overlay for better text visibility -->
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50"></div>
+    </div>
+    
+    <!-- Centered content -->
+    <div class="relative z-[5] flex flex-col items-center justify-center min-h-[calc(100vh-72px)] sm:min-h-[calc(100vh-80px)] md:min-h-[calc(100vh-88px)] px-4 text-center py-20">
+        <h1 class="text-5xl md:text-6xl lg:text-7xl font-premier text-white mb-4 leading-tight">
+            JMS Terminación de la Construcción
+        </h1>
+        <p class="text-xl md:text-2xl text-white max-w-3xl mb-8">
+            Materiales de alta calidad para dar vida a tus proyectos
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4">
+            <a href="/products" class="bg-main-blue-dark hover:bg-main-blue text-white font-medium px-6 py-3 rounded-lg transition-colors">
+                Ver Productos
+            </a>
+            <a href="/contactus" class="bg-transparent border-2 border-white hover:bg-white hover:text-gray-900 text-white font-medium px-6 py-3 rounded-lg transition-colors">
+                Contáctanos
+            </a>
+        </div>
+    </div>
+    
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce z-[5]">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+    </div>
+</section>

@@ -1,0 +1,56 @@
+---
+// Importaciones necesarias
+---
+
+<header class="fixed z-20 flex items-center justify-center w-full py-3 sm:py-4 bg-white border-b border-main-blue-dark shadow-[0_3px_10px_rgb(0,0,0,0.2)]">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-12 sm:h-14">
+            <!-- Logo (aumentado de tamaño) -->
+            <a href="/" class="flex items-center">
+                <img src="/Logo.png" alt="JMS Logo" class="h-10 sm:h-12 md:h-14">
+            </a>
+
+            <!-- Menú de navegación para desktop -->
+            <nav class="hidden md:flex flex-1 items-center justify-center space-x-6">
+                <a href="/" class="font-bold text-gray-800 hover:text-main-blue-dark transition-colors">Inicio</a>
+                <a href="/products" class="font-bold text-gray-800 hover:text-main-blue-dark transition-colors">Productos</a>
+                <a href="/about" class="font-bold text-gray-800 hover:text-main-blue-dark transition-colors">Nosotros</a>
+                <a href="/contactus" class="font-bold text-gray-800 hover:text-main-blue-dark transition-colors">Contacto</a>
+            </nav>
+
+            <!-- Espacio vacío para mantener el logo centrado -->
+            <div class="hidden md:block w-[100px]"></div>
+
+            <!-- Botón de menú móvil -->
+            <button id="mobile-menu-button" class="md:hidden text-gray-800 focus:outline-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Menú móvil -->
+    <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md shadow-md z-20">
+        <div class="container mx-auto px-4 py-4 space-y-3">
+            <a href="/" class="block text-gray-800 hover:text-main-blue-dark transition-colors">Inicio</a>
+            <a href="/products" class="block text-gray-800 hover:text-main-blue-dark transition-colors">Productos</a>
+            <a href="/about" class="block text-gray-800 hover:text-main-blue-dark transition-colors">Nosotros</a>
+            <a href="/contactus" class="block text-gray-800 hover:text-main-blue-dark transition-colors">Contacto</a>
+        </div>
+    </div>
+</header>
+
+<script>
+      document.addEventListener("astro:page-load", () => {
+
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
+});
+</script>
