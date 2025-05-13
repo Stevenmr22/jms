@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+	--color-mint-500: oklch(0.72 0.11 178);
+	--color-main-blue: #08a2e8;
+	--color-main-blue-light: #2bbafc;
+	--color-main-blue-dark: #246b95;
+	--color-secondary-blue: #0678a1;
+	--color-main-white: #f9f9f9;
+}
