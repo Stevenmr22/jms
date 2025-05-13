@@ -1,0 +1,66 @@
+---
+import ProductsSlider from '@components/Sliders/ProductsSlider.astro';
+
+import type Category from '@interfaces/category';
+import type Product from '@interfaces/product';
+import fetchApi from '../../lib/strapi';
+
+// Extraer el parámetro de categoría desde la URL
+const url = new URL(Astro.request.url);
+const categoryParam = url.searchParams.get('category');
+
+// Inicializar variables para manejar errores
+let categories: Category[] = [];
+let products: Product[] = [];
+let error = null;
+
+try {
+	// Obtener categorías desde Strapi
+	const categoriesResponse = await fetchApi<{
+		data: Category[];
+		meta: { pagination: { total: number } };
+	}>({
+		endpoint: 'categories',
+		query: {
+			sort: 'name:asc', // Opcional: ordenar por nombre
+		},
+	});
+
+	categories = categoriesResponse.data;
+
+	// Configurar la consulta para productos
+	const queryObj: Record<string, string> = {
+		populate: '*',
+		sort: 'name:asc',
+	};
+
+	if (categoryParam && categoryParam !== 'all') {
+		queryObj['filters[categories][name][$containsi]'] = categoryParam;
+	}
+
+	const productsResponse = await fetchApi<{
+		data: Product[];
+		meta: { pagination: { total: number } };
+	}>({
+		endpoint: 'products',
+		query: queryObj,
+	});
+
+	products = productsResponse.data;
+
+	products = products.map((product) => {
+		if (!product.categories) {
+			return { ...product, categories: [] };
+		}
+		return product;
+	});
+} catch (e) {
+	console.error('Error fetching data:', e);
+	error = e instanceof Error ? e.message : 'Error desconocido al cargar datos';
+}
+---
+
+<article class="flex flex-col justify-center items-center gap-y-8">
+	<h2 class="font-bold text-4xl">Productos</h2>
+	<ProductsSlider products={products}  />
+</article>

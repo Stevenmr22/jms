@@ -1,0 +1,107 @@
+---
+import type Category from '@interfaces/category';
+import { getDisplayCategoryName } from '@utils/categoryMapping';
+
+interface Props {
+	categories: Category[];
+	activeCategory: string;
+}
+
+const { categories = [], activeCategory = 'all' } = Astro.props;
+
+// Asegurarse de que categories sea un array
+const safeCategories = Array.isArray(categories) ? categories : [];
+---
+
+<div class="mb-8">
+  <div class="flex flex-wrap gap-3 justify-center md:justify-start">
+    <a 
+      href="/products"
+      class={`filter-button px-4 py-2 rounded-full text-sm transition-colors ${activeCategory === 'all' ? 'bg-main-blue-dark text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
+      data-category="all"
+    >
+      Todos
+    </a>
+    
+    {safeCategories.map((category) => (
+      <a 
+        href={`/products?category=${encodeURIComponent(category.name.toLowerCase())}`}
+        class={`filter-button px-4 py-2 rounded-full text-sm transition-colors ${activeCategory === category.name.toLowerCase() ? 'bg-main-blue-dark text-white' : 'bg-gray-100 hover:bg-gray-200'}`}
+        data-category={category.name.toLowerCase()}
+      >
+        {getDisplayCategoryName(category.name)}
+      </a>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const filterButtons = document.querySelectorAll('.filter-button[data-category]');
+    const productItems = document.querySelectorAll('.product-card');
+    
+    // Get category from URL on page load
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryParam = urlParams.get('category');
+    
+    // Apply filter on page load if category param exists
+    if (categoryParam) {
+      filterItems(categoryParam.toLowerCase());
+      
+      // Find and highlight the correct button
+      const selectedButton = document.querySelector(`.filter-button[data-category="${categoryParam.toLowerCase()}"]`);
+      if (selectedButton) {
+        highlightButton(selectedButton as HTMLElement);
+      }
+    }
+
+    // Add click event listeners to all filter buttons
+    filterButtons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        e.preventDefault();
+        const category = button.getAttribute('data-category');
+        
+        if (category) {
+          filterItems(category);
+          highlightButton(button as HTMLElement);
+          
+          // Update URL without page refresh
+          const url = category === 'all' 
+            ? '/products' 
+            : `/products?category=${encodeURIComponent(category)}`;
+          history.pushState({}, '', url);
+        }
+      });
+    });
+
+    function filterItems(category: string) {
+      if (category === 'all') {
+        productItems.forEach(item => {
+          item.classList.remove('hidden');
+        });
+        return;
+      }
+      
+      productItems.forEach(item => {
+        const itemCategoryName = item.getAttribute('data-category-name')?.toLowerCase();
+        
+        if (itemCategoryName === category) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    }
+    
+    // Helper function to highlight active button
+    function highlightButton(activeButton: HTMLElement) {
+      filterButtons.forEach(btn => {
+        btn.classList.remove('bg-main-blue-dark', 'text-white');
+        btn.classList.add('bg-gray-100', 'hover:bg-gray-200');
+      });
+      
+      activeButton.classList.add('bg-main-blue-dark', 'text-white');
+      activeButton.classList.remove('bg-gray-100', 'hover:bg-gray-200');
+    }
+  });
+</script>

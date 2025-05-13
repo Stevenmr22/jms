@@ -1,0 +1,73 @@
+---
+import type Product from '@interfaces/product';
+import { getDisplayCategoryName } from '@utils/categoryMapping';
+
+interface Props {
+	product: Product;
+}
+
+const { product } = Astro.props;
+
+function getImageUrl(product: Product): string {
+	if (
+		product.image &&
+		Array.isArray(product.image) &&
+		product.image.length > 0
+	) {
+		const firstImage = product.image[0];
+		// Check if the image has formats
+		if (firstImage.formats?.large) {
+			return `${import.meta.env.STRAPI_URL}${firstImage.formats.large.url}`;
+		}
+		if (firstImage.url) {
+			return `${import.meta.env.STRAPI_URL}${firstImage.url}`;
+		}
+	}
+	return '/images/placeholder-product.jpg'; // Fallback image
+}
+
+function getCategoryName(product: Product): string {
+	if ((product.categories ?? []).length > 0) {
+		const categoryName = (product.categories ?? [])[0]?.name ?? '';
+		return getDisplayCategoryName(categoryName);
+	}
+	return '';
+}
+---
+
+<div class="bg-white rounded-xl shadow-lg overflow-hidden mb-10">
+  <div class="md:flex">
+    <div class="md:w-1/2">
+      <img 
+        src={getImageUrl(product)} 
+        alt={product.name} 
+        class="w-full h-full object-cover object-center"
+      />
+    </div>
+    <div class="md:w-1/2 p-6 md:p-8">
+      <span class="inline-block px-3 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full mb-4">
+        {getCategoryName(product)}
+      </span>
+      <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{product.name}</h1>
+      
+      <div class="prose max-w-none mb-8">
+        <p>{product.description}</p>
+      </div>
+      
+      <div class="flex flex-col space-y-4">
+        <a 
+          href="/contactus" 
+          class="inline-block px-6 py-3 bg-main-blue-dark text-white font-medium rounded-lg text-center"
+          >
+          Consultar por este producto
+        </a>
+        <a 
+          href="/products" 
+          class="inline-block px-6 py-3 bg-transparent hover:bg-gray-100 border border-gray-300 text-gray-700 font-medium rounded-lg text-center transition-colors"
+        >
+          Volver a productos
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

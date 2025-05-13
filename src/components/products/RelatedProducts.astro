@@ -1,0 +1,55 @@
+---
+import type Product from '@interfaces/product';
+
+interface Props {
+	products: Product[];
+}
+
+const { products } = Astro.props;
+
+// Helper function to get image URL
+function getImageUrl(product: Product): string {
+	if (
+		product.image &&
+		Array.isArray(product.image) &&
+		product.image.length > 0
+	) {
+		const firstImage = product.image[0];
+		// Check if the image has formats
+		if (firstImage.formats?.medium) {
+			return `${import.meta.env.STRAPI_URL}${firstImage.formats.medium.url}`;
+		}
+		if (firstImage.url) {
+			return `${import.meta.env.STRAPI_URL}${firstImage.url}`;
+		}
+	}
+	return '/images/placeholder-product.jpg'; // Fallback image
+}
+---
+
+{products.length > 0 && (
+  <div class="mt-12">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">Productos relacionados</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {products.map((product) => (
+        <a href={`/product/${product.slug}`} class="group">
+          <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+            <img 
+              src={getImageUrl(product)} 
+              alt={product.name} 
+              class="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-105" 
+            />
+            <div class="p-4">
+              <h3 class="text-lg font-medium mb-2 group-hover:text-main-blue-dark transition-colors">
+                {product.name}
+              </h3>
+              <p class="text-sm text-gray-500 line-clamp-2">
+                {product.description}
+              </p>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+)}

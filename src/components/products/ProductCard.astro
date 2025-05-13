@@ -1,0 +1,79 @@
+---
+import type Product from '@interfaces/product';
+
+const { products = [] } = Astro.props as { products: Product[] };
+
+// Ensure products is always an array
+const safeProducts = Array.isArray(products) ? products : [];
+
+// Helper function to get the first category ID
+function getCategoryId(product: Product): number | string {
+	if (product.categories?.[0]?.id) {
+		return product.categories[0].id;
+	}
+	return '';
+}
+
+// Helper function to get the first category name
+function getCategoryName(product: Product): string {
+	if (product.categories?.[0]?.name) {
+		return product.categories[0].name;
+	}
+	return '';
+}
+
+function getImageUrl(product: Product): string {
+	if (
+		product.image &&
+		Array.isArray(product.image) &&
+		product.image.length > 0
+	) {
+		const firstImage = product.image[0];
+		// Check if the image has formats
+		if (firstImage.formats?.large) {
+			return `${import.meta.env.STRAPI_URL}${firstImage.formats.large.url}`;
+		}
+		if (firstImage.url) {
+			return `${import.meta.env.STRAPI_URL}${firstImage.url}`;
+		}
+	}
+	return '/images/placeholder-product.jpg'; // Fallback image
+}
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  {safeProducts.length > 0 ? (
+    safeProducts.map((product) => (
+      <a 
+        href={`/product/${product.slug}`} 
+        class="group product-card" 
+        data-category={getCategoryId(product)}
+        data-category-name={getCategoryName(product)}
+      >
+        <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+          <img 
+            src={getImageUrl(product)} 
+            alt={product.name} 
+            class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" 
+          />
+          <div class="p-4">
+            <div class="text-xs text-black mb-1 uppercase">
+              {getCategoryName(product)}
+            </div>
+            <h3 class="text-lg mb-2 group-hover:text-blue-600 transition-colors">
+              {product.name}
+            </h3>
+            <p class="text-sm text-black mb-3 line-clamp-2">
+              {product.description}
+            </p>
+          </div>
+        </div>
+      </a>
+    ))
+  ) : (
+    <div class="col-span-full text-center py-12">
+      <h3 class="text-xl font-medium text-gray-500">No se encontraron productos</h3>
+      <p class="mt-2 text-gray-400">Intenta cambiar los filtros de búsqueda</p>
+    </div>
+  )}
+</div>

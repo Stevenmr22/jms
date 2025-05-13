@@ -1,0 +1,102 @@
+---
+import type Product from '@interfaces/product';
+import { getDisplayCategoryName } from '@utils/categoryMapping';
+
+interface Props {
+	products: Product[];
+}
+
+const { products = [] } = Astro.props;
+
+// Asegurarse de que products sea un array
+const safeProducts = Array.isArray(products) ? products : [];
+
+// Función para obtener el nombre de la primera categoría del producto
+function getCategoryName(product: Product): string {
+	if (
+		product.categories &&
+		product.categories.length > 0 &&
+		product.categories[0].name
+	) {
+		return product.categories[0].name;
+	}
+	return '';
+}
+
+// Función para obtener la URL de la imagen del producto
+function getProductImageUrl(product: Product): string {
+	// Si product.image es una string directamente (URL)
+	if (typeof product.image === 'string') {
+		return product.image;
+	}
+
+	// Si product.image es un array de objetos con información de la imagen
+	if (Array.isArray(product.image) && (product.image as unknown[]).length > 0) {
+		const firstImage = product.image[0] as {
+			formats?: { medium?: { url: string } };
+			url?: string;
+		};
+		if (typeof firstImage === 'string') {
+			return firstImage;
+		}
+
+		// Si es un objeto con formato de Strapi
+		if (firstImage && typeof firstImage === 'object') {
+			// Check if the image has formats
+			if (firstImage.formats?.medium?.url) {
+				return import.meta.env.STRAPI_URL
+					? `${import.meta.env.STRAPI_URL}${firstImage.formats.medium.url}`
+					: firstImage.formats.medium.url;
+			}
+			if (firstImage.url) {
+				return import.meta.env.STRAPI_URL
+					? `${import.meta.env.STRAPI_URL}${firstImage.url}`
+					: firstImage.url;
+			}
+		}
+	}
+
+	// Imagen por defecto si no se encuentra ninguna
+	return '/public/ImgBano1.jpg';
+}
+---
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+  {safeProducts.length > 0 ? (
+    safeProducts.map((product) => {
+      const categoryName = getCategoryName(product);
+      
+      return (
+        <a 
+          href={`/product/${product.slug}`} 
+          class="group product-card" 
+          data-category-name={categoryName.toLowerCase()}
+        >
+          <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
+            <img 
+              src={getProductImageUrl(product)} 
+              alt={product.name} 
+              class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" 
+            />
+            <div class="p-4">
+              <div class="text-xs text-black mb-1 uppercase">
+                {getDisplayCategoryName(categoryName)}
+              </div>
+              <h3 class="text-lg mb-2 group-hover:text-main-blue-dark transition-colors">
+                {product.name}
+              </h3>
+              <p class="text-sm text-black mb-3 line-clamp-2">
+                {product.description}
+              </p>
+            </div>
+          </div>
+        </a>
+      );
+    })
+  ) : (
+    <div class="col-span-full text-center py-12">
+      <h3 class="text-xl font-medium text-gray-500">No se encontraron productos</h3>
+      <p class="mt-2 text-gray-400">Intenta cambiar los filtros de búsqueda</p>
+    </div>
+  )}
+</div>
