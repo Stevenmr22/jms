@@ -1,0 +1,10 @@
+---
+const { class: className } = Astro.props;
+---
+
+<a
+	class={`text-white p-2 transition border border-solid border-transparent rounded-xl w-fit bg-main-blue hover:bg-main-blue-light hover:scale-105 shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_10px_10px_30px_4px_rgba(8,162,232,0.05)] ${className}`}
+	{...Astro.props}
+	rel="noopener noreferrer">
+	<slot />
+</a>

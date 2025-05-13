@@ -1,0 +1,10 @@
+---
+const { class: className } = Astro.props;
+---
+
+<a
+	class={`hover:text-main-blue transition font-normal text-lg ${className}`}
+	{...Astro.props}
+	rel="noopener noreferrer">
+	<slot />
+</a>
