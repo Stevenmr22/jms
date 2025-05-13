@@ -1,0 +1,90 @@
+---
+import SectionContainer from '@components/common/SectionContainer.astro';
+import ProductFilters from '@components/products/ProductsFilters.astro';
+import ProductsGrid from '@components/products/ProductsGrid.astro';
+import ProductsHeader from '@components/products/ProductsHeader.astro';
+import Layout from '@layouts/Layout.astro';
+import '../styles/global.css';
+
+import type Category from '@interfaces/category';
+import type Product from '@interfaces/product';
+import fetchApi from '../lib/strapi';
+
+// Extraer el parámetro de categoría desde la URL
+const url = new URL(Astro.request.url);
+const categoryParam = url.searchParams.get('category');
+
+// Inicializar variables para manejar errores
+let categories: Category[] = [];
+let products: Product[] = [];
+let error = null;
+
+try {
+	// Obtener categorías desde Strapi
+	const categoriesResponse = await fetchApi<{
+		data: Category[];
+		meta: { pagination: { total: number } };
+	}>({
+		endpoint: 'categories',
+		query: {
+			sort: 'name:asc', // Opcional: ordenar por nombre
+		},
+	});
+
+	categories = categoriesResponse.data;
+
+	// Configurar la consulta para productos
+	const queryObj: Record<string, string> = {
+		populate: '*',
+		sort: 'name:asc',
+	};
+
+	if (categoryParam && categoryParam !== 'all') {
+		queryObj['filters[categories][name][$containsi]'] = categoryParam;
+	}
+
+	const productsResponse = await fetchApi<{
+		data: Product[];
+		meta: { pagination: { total: number } };
+	}>({
+		endpoint: 'products',
+		query: queryObj,
+	});
+
+	products = productsResponse.data;
+
+	products = products.map((product) => {
+		if (!product.categories) {
+			return { ...product, categories: [] };
+		}
+		return product;
+	});
+} catch (e) {
+	console.error('Error fetching data:', e);
+	error = e instanceof Error ? e.message : 'Error desconocido al cargar datos';
+}
+---
+
+<Layout
+  title="JMS - Productos"
+  description="Descubre nuestra amplia gama de productos para terminación de construcción"
+>
+  <main class="flex flex-col px-4 md:px-20 mb-4 pt-[72px] sm:pt-[88px]">
+    <SectionContainer class="mt-8 md:mt-12">
+      <ProductsHeader />
+      
+      {error ? (
+        <div class="bg-red-50 border border-red-200 text-red-800 rounded-lg p-4 mb-8">
+          <h3 class="font-bold text-lg mb-2">Error al cargar productos</h3>
+          <p>{error}</p>
+          <p class="mt-2 text-sm">Por favor, intenta nuevamente más tarde.</p>
+        </div>
+      ) : (
+        <>
+          <ProductFilters categories={categories} activeCategory={categoryParam || 'all'} />
+          <ProductsGrid products={products} />
+        </>
+      )}
+    </SectionContainer>
+  </main>
+</Layout>

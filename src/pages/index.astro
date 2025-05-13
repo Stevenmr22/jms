@@ -1,16 +1,35 @@
 ---
+import SectionContainer from '@components/common/SectionContainer.astro';
+import Layout from '@layouts/Layout.astro';
+import MainHero from '@layouts/MainHero.astro';
+import MainHero2 from '@layouts/MainHero2.astro';
+import '../styles/global.css';
 
+import Categories from '@components/categories/Categories.astro';
+import Instagram from '@components/instagram/Instagram.astro';
+import Products from '@components/products/Products.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout
+    title="JMS - Terminación de la construcción"
+    description="Terminación de la construcción">
+    <MainHero />
+    
+    <main class="flex flex-col gap-y-8 sm:gap-y-10 md:gap-y-12 lg:gap-y-16 px-4 sm:px-8 md:px-12 lg:px-20 mt-12">
+        <SectionContainer>
+            <MainHero2 />
+        </SectionContainer>
+
+        <SectionContainer>
+            <Categories />
+        </SectionContainer>
+
+        <SectionContainer>
+            <Products />
+        </SectionContainer>
+        
+        <SectionContainer>
+            <Instagram />
+        </SectionContainer>
+    </main>
+</Layout>

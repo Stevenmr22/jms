@@ -1,0 +1,24 @@
+---
+import SectionContainer from '@components/common/SectionContainer.astro';
+import Layout from '@layouts/Layout.astro';
+import ContactForm from '@src/components/contact/ContactForm.astro';
+import ContactInfo from '@src/components/contact/ContactInfo.astro';
+import Locations from '@src/components/contact/Locations.astro';
+import '../styles/global.css';
+---
+
+<Layout
+  title="JMS - Contáctenos" 
+  description="Contacte con JMS Terminación de la construcción">
+  <main class="flex flex-col gap-y-8 sm:gap-y-10 md:gap-y-12 lg:gap-y-16 px-4 sm:px-8 md:px-12 lg:px-20">
+    <SectionContainer class="mt-40">
+      <ContactForm />
+    </SectionContainer>
+    <SectionContainer class="mt-10">
+      <ContactInfo />
+    </SectionContainer>
+    <SectionContainer class="mt-10">
+        <Locations />
+    </SectionContainer>
+</main>
+</Layout>

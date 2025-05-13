@@ -1,0 +1,28 @@
+---
+import SectionContainer from '@components/common/SectionContainer.astro';
+import TextImageSection from '@components/common/TextImageSection.astro';
+import Layout from '@layouts/Layout.astro';
+import MissionVisionValues from '@src/components/about/MissionVisionValues.astro';
+import OurTeam from '@src/components/about/OurTeam.astro';
+import MainHeroUs from '@src/layouts/MainHeroUs.astro';
+import '../styles/global.css';
+---
+
+<Layout
+	title="JMS - Terminación de la construcción"
+	description="Terminación de la construcción">
+	<main class="flex flex-col gap-y-8 sm:gap-y-10 md:gap-y-12 lg:gap-y-16 px-4 sm:px-8 md:px-12 lg:px-20">
+		<SectionContainer class="mt-40">
+			<MainHeroUs />
+		</SectionContainer>
+		<SectionContainer>
+			<TextImageSection />
+		</SectionContainer>
+		<SectionContainer>
+			<MissionVisionValues />
+		</SectionContainer>
+		<SectionContainer>
+			<OurTeam />
+		</SectionContainer>
+	</main>
+</Layout>
