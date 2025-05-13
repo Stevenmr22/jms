@@ -1,0 +1,333 @@
+---
+import type Product from '@interfaces/product';
+import { getDisplayCategoryName } from '@utils/categoryMapping';
+
+interface Props {
+	products: Product[];
+}
+
+const { products = [] } = Astro.props;
+
+// Asegurarse de que products sea un array
+const safeProducts = Array.isArray(products) ? products : [];
+
+// Función para obtener el nombre de la primera categoría del producto
+function getCategoryName(product: Product): string {
+	if (
+		product.categories &&
+		product.categories.length > 0 &&
+		product.categories[0].name
+	) {
+		return product.categories[0].name;
+	}
+	return '';
+}
+
+function getProductImageUrl(product: Product): string {
+	if (typeof product.image === 'string') {
+		return product.image;
+	}
+
+	if (Array.isArray(product.image) && (product.image as unknown[]).length > 0) {
+		const firstImage = product.image[0] as {
+			formats?: { medium?: { url: string } };
+			url?: string;
+		};
+		if (typeof firstImage === 'string') {
+			return firstImage;
+		}
+
+		if (firstImage && typeof firstImage === 'object') {
+			if (firstImage.formats?.medium?.url) {
+				return import.meta.env.STRAPI_URL
+					? `${import.meta.env.STRAPI_URL}${firstImage.formats.medium.url}`
+					: firstImage.formats.medium.url;
+			}
+			if (firstImage.url) {
+				return import.meta.env.STRAPI_URL
+					? `${import.meta.env.STRAPI_URL}${firstImage.url}`
+					: firstImage.url;
+			}
+		}
+	}
+
+	return '/public/ImgBano1.jpg';
+}
+---
+
+<script>
+    import Swiper from "swiper";
+    import { Navigation, Pagination, Grid, Autoplay } from "swiper/modules";
+    import "swiper/css";
+    import "swiper/css/navigation";
+    import "swiper/css/pagination";
+    import "swiper/css/grid";
+
+    document.addEventListener('astro:page-load', () => {
+        const swiper = new Swiper(".swiper-product", {
+            modules: [Navigation, Pagination, Grid, Autoplay],
+            
+            direction: "horizontal",
+            loop: false,
+            
+            slidesPerView: 1,
+            spaceBetween: 16,
+            
+            grid: {
+                rows: 1,
+                fill: 'row'
+            },
+            
+            breakpoints: {
+                480: {
+                    slidesPerView: 2,
+                    spaceBetween: 16,
+                    grid: {
+                        rows: 1
+                    }
+                },
+                768: {
+                    slidesPerView: 2,
+                    spaceBetween: 20,
+                    grid: {
+                        rows: 2
+                    }
+                },
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 20,
+                    grid: {
+                        rows: 2
+                    }
+                },
+                1280: {
+                    slidesPerView: 4,
+                    spaceBetween: 20,
+                    grid: {
+                        rows: 2
+                    }
+                }
+            },
+            
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            
+            pagination: {
+                el: ".swiper-pagination-product",
+                clickable: true,
+            },
+
+            navigation: {
+                nextEl: ".swiper-button-next-product",
+                prevEl: ".swiper-button-prev-product",
+            },
+        });
+    });
+</script>
+
+<style>
+    .swiper-product {
+        width: 100%;
+        max-width: 1280px;
+        height: auto;
+        margin: 0 auto;
+        position: relative;
+        padding: 10px 40px;
+        overflow: hidden;
+    }
+    
+    .product-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: 0;
+        height: 100%;
+        transition: all 0.4s ease;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .product-container:hover {
+        transform: translateY(-5px);
+    }
+    
+    .product-container:hover .product-image {
+        transform: scale(1.05);
+    }
+    
+    .product-container:hover .product-title {
+        color: #2563eb;
+    }
+    
+    .product-image-wrapper {
+        width: 100%;
+        height: 180px;
+        overflow: hidden;
+        border-radius: 8px;
+        position: relative;
+    }
+    
+    .product-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+    
+    .product-category {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        background-color: #2563eb;
+        color: white;
+        font-size: 0.7rem;
+        padding: 3px 10px;
+        border-radius: 4px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .product-title {
+        font-weight: 200;
+        text-align: center;
+        color: #1f2937;
+        font-size: 1.1rem;
+        margin: 0;
+        line-height: 1.4;
+        transition: color 0.3s ease;
+    }
+    
+    @media (min-width: 768px) {
+        .swiper-product {
+            height: 560px;
+            padding: 10px 40px;
+        }
+        
+        .product-image-wrapper {
+            height: 220px;
+        }
+    }
+    
+    @media (min-width: 1024px) {
+        .swiper-product {
+            height: 600px;
+            padding: 10px 40px;
+        }
+        
+        .product-image-wrapper {
+            height: 240px;
+        }
+    }
+    
+    .swiper-button-next-product,
+    .swiper-button-prev-product {
+        color: #2563eb;
+        width: 40px;
+        height: 40px;
+        top: 40%;
+        transition: all 0.3s ease;
+    }
+    
+    .swiper-button-next-product:hover,
+    .swiper-button-prev-product:hover {
+        color: #1e40af;
+    }
+    
+    .swiper-button-prev-product {
+        left: 0;
+    }
+    
+    .swiper-button-next-product {
+        right: 0;
+    }
+    
+    .swiper-pagination-product {
+        bottom: -5px !important;
+        position: relative;
+        margin-top: 10px;
+    }
+    
+    .swiper-pagination-bullet {
+        width: 8px;
+        height: 8px;
+        background-color: #94a3b8;
+        opacity: 0.7;
+        margin: 0 5px;
+    }
+    
+    .swiper-pagination-bullet-active {
+        background-color: #2563eb;
+        opacity: 1;
+    }
+
+    .swiper-button-next-product:after,
+    .swiper-button-prev-product:after {
+        font-size: 18px;
+        font-weight: bold;
+    }
+    
+    .product-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+    
+    .no-products {
+        background-color: #fff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .no-products h3 {
+        font-size: 1.25rem;
+        color: #6b7280;
+        font-weight: 500;
+    }
+</style>
+
+<div class="swiper-product">
+    <div class="swiper-wrapper">
+        {safeProducts.length > 0 ? (
+            safeProducts.map((product) => {
+                const categoryName = getCategoryName(product);
+                
+                return (
+                    <div class="swiper-slide">
+                        <a 
+                            href={`/product/${product.slug}`} 
+                            class="product-link"
+                        >
+                            <div class="product-container">
+                                <div class="product-image-wrapper">
+                                    <img 
+                                        src={getProductImageUrl(product)} 
+                                        alt={product.name} 
+                                        class="product-image" 
+                                        loading="lazy"
+                                    />
+                                </div>
+                                <h3 class="product-title">
+                                    {product.name}
+                                </h3>
+                            </div>
+                        </a>
+                    </div>
+                );
+            })
+        ) : (
+            <div class="swiper-slide col-span-full">
+                <div class="no-products">
+                    <h3>No se encontraron productos</h3>
+                </div>
+            </div>
+        )}
+    </div>
+
+</div>
