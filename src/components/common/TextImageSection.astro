@@ -1,24 +1,27 @@
 ---
+import { Image } from 'astro:assets';
 ---
 
-<section class="flex flex-col md:flex-row items-center gap-8 py-16">
+<section class="flex flex-col md:flex-row items-center gap-8">
     <!-- Lado izquierdo: Texto -->
     <div class="flex-1">
       <h2 class="text-3xl mb-4">JMS Terminación de la Construcción</h2>
       <p class="text-base leading-relaxed text-gray-700">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce varius faucibus massa sollicitudin amet augue. Nibh metus a semper purus mauris duis. Lorem eu neque, tristique quis duis. Nibh scelerisque ac adipiscing velit non nulla in amet pellentesque. Sit turpis pretium eget maecenas. Vestibulum dolor mattis consectetur eget commodo vitae.
+        Somos una empresa dedicada a la venta de artículos ferreteros del área de terminación del sector construcción llámese porcelanatos y cerámicas de pisos, paredes e interiores, mobiliarios de baños ya sea inodoro, bañeras, jacuzzi y más. De igual manera ofrecemos la venta de ladrillos, coralina y piedra cortada.
       </p>
       <p class="text-base leading-relaxed text-gray-700 mt-4">
-        Amet pellentesque sit pulvinar lorem mi a, euismod risus rhoncus. Elementum ullamcorper nec, habitasse vulputate. Eget dictum quis est sed egestas tellus, a lectus. Quam ullamcorper in fringilla arcu aliquet fames arcu. Lacinia eget faucibus urna, nam risus nec elementum cras porta. Sed elementum, sed dolor purus dolor dui. Ut dictum nulla pulvinar vulputate sit sagittis in eleifend dignissim. Natoque mauris cras molestie velit. Maecenas eget adipiscing quisque viverra lectus arcu, tincidunt ultrices pellentesque.
+        JMS es más que eso, pues como empresa te brindamos asesorías para crear espacios armoniosos según tu necesidad, te medimos tus ventanas y vidrios al mejor precio del mercado con la venta e instalación de los mismos.
       </p>
     </div>
   
     <!-- Lado derecho: Imagen -->
     <div class="flex-1">
-      <img 
-        src="/Logo.png" 
-        alt="Imagen de construcción" 
-        class="w-full h-auto max-w-md mx-auto"
-      />
+      <Image
+        src="/img/logo/logo.webp"
+        alt="Logo de JMS"
+        class="w-full h-auto max-w-md mx-auto mt-4"
+        width={600}
+        height={400}  
+        >
     </div>
   </section>
