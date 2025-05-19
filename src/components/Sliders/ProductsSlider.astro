@@ -1,7 +1,6 @@
 ---
+import { Image } from 'astro:assets';
 import type Product from '@interfaces/product';
-import { getDisplayCategoryName } from '@utils/categoryMapping';
-
 interface Props {
 	products: Product[];
 }
@@ -38,15 +37,28 @@ function getProductImageUrl(product: Product): string {
 		}
 
 		if (firstImage && typeof firstImage === 'object') {
+			// Check if the URL already includes the host
 			if (firstImage.formats?.medium?.url) {
+				const mediumUrl = firstImage.formats.medium.url;
+				// If the URL already starts with http or https, return it directly
+				if (mediumUrl.startsWith('http')) {
+					return mediumUrl;
+				}
+				// Otherwise, prepend the STRAPI_URL if available
 				return import.meta.env.STRAPI_URL
-					? `${import.meta.env.STRAPI_URL}${firstImage.formats.medium.url}`
-					: firstImage.formats.medium.url;
+					? `${import.meta.env.STRAPI_URL.replace(/\/$/, '')}${mediumUrl.startsWith('/') ? '' : '/'}${mediumUrl}`
+					: mediumUrl;
 			}
 			if (firstImage.url) {
+				const url = firstImage.url;
+				// If the URL already starts with http or https, return it directly
+				if (url.startsWith('http')) {
+					return url;
+				}
+				// Otherwise, prepend the STRAPI_URL if available
 				return import.meta.env.STRAPI_URL
-					? `${import.meta.env.STRAPI_URL}${firstImage.url}`
-					: firstImage.url;
+					? `${import.meta.env.STRAPI_URL.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`
+					: url;
 			}
 		}
 	}
@@ -306,11 +318,12 @@ function getProductImageUrl(product: Product): string {
                         >
                             <div class="product-container">
                                 <div class="product-image-wrapper">
-                                    <img 
+                                    <Image 
                                         src={getProductImageUrl(product)} 
                                         alt={product.name} 
                                         class="product-image" 
-                                        loading="lazy"
+                                        width={300}
+                                        height={300}
                                     />
                                 </div>
                                 <h3 class="product-title">
