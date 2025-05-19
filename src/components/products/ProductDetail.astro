@@ -17,10 +17,26 @@ function getImageUrl(product: Product): string {
 		const firstImage = product.image[0];
 		// Check if the image has formats
 		if (firstImage.formats?.large) {
-			return `${import.meta.env.STRAPI_URL}${firstImage.formats.large.url}`;
+			const url = firstImage.formats.large.url;
+			// If the URL already starts with http or https, return it directly
+			if (url.startsWith('http')) {
+				return url;
+			}
+			// Otherwise, prepend the STRAPI_URL if available
+			return import.meta.env.STRAPI_URL
+				? `${import.meta.env.STRAPI_URL.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`
+				: url;
 		}
 		if (firstImage.url) {
-			return `${import.meta.env.STRAPI_URL}${firstImage.url}`;
+			const url = firstImage.url;
+			// If the URL already starts with http or https, return it directly
+			if (url.startsWith('http')) {
+				return url;
+			}
+			// Otherwise, prepend the STRAPI_URL if available
+			return import.meta.env.STRAPI_URL
+				? `${import.meta.env.STRAPI_URL.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`
+				: url;
 		}
 	}
 	return '/images/placeholder-product.jpg'; // Fallback image

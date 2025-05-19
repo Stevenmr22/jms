@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type Product from '@interfaces/product';
 import { getDisplayCategoryName } from '@utils/categoryMapping';
 
@@ -25,12 +26,10 @@ function getCategoryName(product: Product): string {
 
 // Función para obtener la URL de la imagen del producto
 function getProductImageUrl(product: Product): string {
-	// Si product.image es una string directamente (URL)
 	if (typeof product.image === 'string') {
 		return product.image;
 	}
 
-	// Si product.image es un array de objetos con información de la imagen
 	if (Array.isArray(product.image) && (product.image as unknown[]).length > 0) {
 		const firstImage = product.image[0] as {
 			formats?: { medium?: { url: string } };
@@ -40,23 +39,33 @@ function getProductImageUrl(product: Product): string {
 			return firstImage;
 		}
 
-		// Si es un objeto con formato de Strapi
 		if (firstImage && typeof firstImage === 'object') {
-			// Check if the image has formats
+			// Check if the URL already includes the host
 			if (firstImage.formats?.medium?.url) {
+				const mediumUrl = firstImage.formats.medium.url;
+				// If the URL already starts with http or https, return it directly
+				if (mediumUrl.startsWith('http')) {
+					return mediumUrl;
+				}
+				// Otherwise, prepend the STRAPI_URL if available
 				return import.meta.env.STRAPI_URL
-					? `${import.meta.env.STRAPI_URL}${firstImage.formats.medium.url}`
-					: firstImage.formats.medium.url;
+					? `${import.meta.env.STRAPI_URL.replace(/\/$/, '')}${mediumUrl.startsWith('/') ? '' : '/'}${mediumUrl}`
+					: mediumUrl;
 			}
 			if (firstImage.url) {
+				const url = firstImage.url;
+				// If the URL already starts with http or https, return it directly
+				if (url.startsWith('http')) {
+					return url;
+				}
+				// Otherwise, prepend the STRAPI_URL if available
 				return import.meta.env.STRAPI_URL
-					? `${import.meta.env.STRAPI_URL}${firstImage.url}`
-					: firstImage.url;
+					? `${import.meta.env.STRAPI_URL.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`
+					: url;
 			}
 		}
 	}
 
-	// Imagen por defecto si no se encuentra ninguna
 	return '/public/ImgBano1.jpg';
 }
 ---
@@ -73,10 +82,12 @@ function getProductImageUrl(product: Product): string {
           data-category-name={categoryName.toLowerCase()}
         >
           <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
-            <img 
+            <Image 
               src={getProductImageUrl(product)} 
               alt={product.name} 
-              class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" 
+              class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+			  width={300}
+			  height={300}
             />
             <div class="p-4">
               <div class="text-xs text-black mb-1 uppercase">

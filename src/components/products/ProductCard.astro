@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 import type Product from '@interfaces/product';
 
 const { products = [] } = Astro.props as { products: Product[] };
@@ -6,18 +7,18 @@ const { products = [] } = Astro.props as { products: Product[] };
 // Ensure products is always an array
 const safeProducts = Array.isArray(products) ? products : [];
 
-// Helper function to get the first category ID
-function getCategoryId(product: Product): number | string {
-	if (product.categories?.[0]?.id) {
-		return product.categories[0].id;
+// Updated function to get all category IDs as a comma-separated string
+function getCategoryIds(product: Product): string {
+	if (product.categories && Array.isArray(product.categories)) {
+		return product.categories.map((cat) => cat.id).join(',');
 	}
 	return '';
 }
 
-// Helper function to get the first category name
-function getCategoryName(product: Product): string {
-	if (product.categories?.[0]?.name) {
-		return product.categories[0].name;
+// Updated function to get all category names as a comma-separated string
+function getCategoryNames(product: Product): string {
+	if (product.categories && Array.isArray(product.categories)) {
+		return product.categories.map((cat) => cat.name).join(', ');
 	}
 	return '';
 }
@@ -47,18 +48,20 @@ function getImageUrl(product: Product): string {
       <a 
         href={`/product/${product.slug}`} 
         class="group product-card" 
-        data-category={getCategoryId(product)}
-        data-category-name={getCategoryName(product)}
+        data-category={getCategoryIds(product)}
+        data-category-name={getCategoryNames(product)}
       >
         <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition duration-300">
-          <img 
+          <Image 
             src={getImageUrl(product)} 
             alt={product.name} 
-            class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105" 
+            class="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
+            width={300}
+            height={300}
           />
           <div class="p-4">
             <div class="text-xs text-black mb-1 uppercase">
-              {getCategoryName(product)}
+              {getCategoryNames(product)}
             </div>
             <h3 class="text-lg mb-2 group-hover:text-blue-600 transition-colors">
               {product.name}
