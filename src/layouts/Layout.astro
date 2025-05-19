@@ -1,6 +1,7 @@
 ---
 import '@fontsource-variable/montserrat';
 import { ClientRouter } from 'astro:transitions';
+import { keywords } from '../data/keywords.js'; // Ajusta la ruta si es necesario
 import Background from './Background.astro';
 import Footer from './Footer.astro';
 import Header from './Header.astro';
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const metaKeywords = keywords.join(', ');
 ---
 
 <!doctype html>
@@ -18,10 +20,21 @@ const { title, description } = Astro.props;
     <head>
         <ClientRouter />
         <meta charset="UTF-8" />
-        <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
+        <meta name="description" content={description} />
+        <meta name="keywords" content={metaKeywords} />
         <meta name="generator" content={Astro.generator} />
+        <meta name="geo.region" content="CL-RM" />
+        <meta name="geo.placename" content="Santiago de los Caballeros" />
+        <meta name="geo.position" content="-19.450, -70.690" />
+        <meta name="ICBM" content="-19.450, -70.690" />
+        <meta name="business:contact_data:street_address" content="Autopista Duarte Km 4 1/2. Canabacoa" />
+        <meta name="business:contact_data:locality" content="Santiago de los Caballeros" />
+        <meta name="business:contact_data:country_name" content="República Dominicana" />
+        <meta name="business:contact_data:email" content="jmsterminaciondelaconstruccion@hotmail.com" />
+        <meta name="business:contact_data:phone_number" content="+180986122588" />
+        <meta name="business:contact_data:website" content="https://www.instagram.com/jmsterminaciones/" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
         <title>{title}</title>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css">
     </head>
@@ -72,3 +85,43 @@ const { title, description } = Astro.props;
         }
     }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HardwareStore",
+  "name": "JMS Terminación de la Construcción",
+  "image": "https://www.instagram.com/jmsterminaciones/profile_pic", 
+  "url": "https://www.instagram.com/jmsterminaciones/",
+  "telephone": "+180986122588",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Autopista Duarte Km 4 1/2. Canabacoa",
+    "addressLocality": "Santiago de los Caballeros",
+    "addressCountry": "DO"
+  },
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday"
+      ],
+      "opens": "08:00",
+      "closes": "18:00"
+    },
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": "Saturday",
+      "opens": "08:00",
+      "closes": "12:00"
+    }
+  ],
+  "sameAs": [
+    "https://www.instagram.com/jmsterminaciones/",
+    "https://g.co/kgs/mLKUWYn"
+  ]
+}
+</script>

@@ -1,13 +1,16 @@
+---
+import { Image } from 'astro:assets';
+---
 <!-- Hero Section -->
 <section class="relative min-h-screen overflow-hidden mt-[72px] sm:mt-[80px] md:mt-[88px]">
     <!-- Full-height background image -->
     <div class="absolute inset-0">
-        <img 
-            src="/img/hero/hero.png"
-            alt="Terminación de construcción de alta calidad"
-            class="w-full h-full object-cover"
-            loading="eager"
-            fetchpriority="high"
+        <Image
+        src="/img/hero/hero.webp"
+        alt="Terminación de construcción de alta calidad"
+        class="w-full h-full object-cover"
+        width={1920}
+        height={1080}
         />
         <!-- Dark overlay for better text visibility -->
         <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50"></div>

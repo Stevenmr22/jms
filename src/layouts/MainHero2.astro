@@ -1,4 +1,5 @@
 ---
+import { Image } from 'astro:assets';
 ---
 
 <section class="relative overflow-hidden">
@@ -16,13 +17,13 @@
                 </a>
             </div>
         </div>
-        <img 
-            src="/ceramica.jpg" 
-            alt="Imagen de nosotros" 
+        <Image
+            src="/img/hero/ceramica.webp"
+            alt="Terminación de construcción de alta calidad"
+            class="w-full h-full object-cover"
+            width={600}
+            height={400}
             class="rounded-lg w-full md:w-1/2 order-1 md:order-2 shadow-xl"
-            width="600"
-            height="400"
-            loading="lazy"
         />
     </article>
 </section>
