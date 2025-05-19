@@ -1,5 +1,6 @@
 ---
-// Datos para las imágenes de Instagram
+
+import { Image } from 'astro:assets';
 const instagramPosts = [
 	{
 		id: 1,
@@ -57,7 +58,6 @@ const instagramPosts = [
 		likes: 123,
 		comments: 18,
 	},
-	// Imagen adicional solo para iPad/tabletas
 	{
 		id: 9,
 		imageUrl: '/img/instagram/instagram12.jpg',
@@ -68,7 +68,6 @@ const instagramPosts = [
 	},
 ];
 
-// Separa las imágenes normales y la imagen para tablet
 const regularPosts = instagramPosts.filter((post) => !post.tabletOnly);
 const tabletPost = instagramPosts.find((post) => post.tabletOnly);
 ---
@@ -100,11 +99,13 @@ const tabletPost = instagramPosts.find((post) => post.tabletOnly);
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-3 relative z-0">
           {regularPosts.map(post => (
             <a href="https://instagram.com/jmsterminaciones/" target="_blank" rel="noopener noreferrer" class="relative group overflow-hidden bg-gray-100 aspect-square">
-              <img 
-                src={post.imageUrl} 
-                alt={post.alt} 
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
+            <Image 
+              src={post.imageUrl}
+              alt={post.alt} 
+              width={500}
+              height={500}
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
               <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
                 <div class="flex items-center space-x-4 text-white">
                   <div class="flex items-center">
@@ -132,11 +133,13 @@ const tabletPost = instagramPosts.find((post) => post.tabletOnly);
               rel="noopener noreferrer" 
               class="relative group overflow-hidden bg-gray-100 aspect-square hidden md:block lg:hidden"
             >
-              <img 
-                src={tabletPost.imageUrl} 
-                alt={tabletPost.alt} 
-                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-              />
+            <Image 
+              src={tabletPost.imageUrl} 
+              alt={tabletPost.alt} 
+              width={500}
+              height={500}
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
               <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
                 <div class="flex items-center space-x-4 text-white">
                   <div class="flex items-center">
