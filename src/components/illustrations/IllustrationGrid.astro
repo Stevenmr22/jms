@@ -1,0 +1,58 @@
+---
+import type Illustration from '@interfaces/illustration';
+import { Image } from 'astro:assets';
+
+const { illustrations, error } = Astro.props;
+
+function getImageUrl(illustration: Illustration): string {
+    if (
+        illustration.image &&
+        Array.isArray(illustration.image) &&
+        illustration.image.length > 0
+    ) {
+        const firstImage = illustration.image[0];
+        if (firstImage.formats?.large) {
+            const url = firstImage.formats.large.url;
+            if (url.startsWith('http')) {
+                return url;
+            }
+            return import.meta.env.STRAPI_URL
+                ? `${import.meta.env.STRAPI_URL.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`
+                : url;
+        }
+        if (firstImage.url) {
+            const url = firstImage.url;
+            if (url.startsWith('http')) {
+                return url;
+            }
+            return import.meta.env.STRAPI_URL
+                ? `${import.meta.env.STRAPI_URL.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`
+                : url;
+        }
+    }
+    return '/images/placeholder-product.jpg';
+}
+---
+
+{illustrations.length > 0 ? (
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
+        {illustrations.map((illustration: Illustration) => (
+            <div class="overflow-hidden rounded-lg shadow-lg transition-transform duration-300 hover:scale-105 bg-white">
+                <div class="aspect-square w-full">
+                    <Image
+                        src={getImageUrl(illustration)} 
+                        alt="Ilustración" 
+                        class="w-full h-full object-cover"
+                        loading="lazy"
+                        width={400}
+                        height={400}
+                    />
+                </div>
+            </div>
+        ))}
+    </div>
+) : !error && (
+    <div class="text-center py-12">
+        <p class="text-gray-500 text-lg">No hay ilustraciones disponibles en este momento.</p>
+    </div>
+)}

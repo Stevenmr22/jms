@@ -1,0 +1,52 @@
+---
+import Layout from '@layouts/Layout.astro';
+import '../styles/global.css';
+import fetchApi from '../lib/strapi';
+import type Illustration from '@interfaces/illustration';
+import IllustrationHeader from '@src/components/illustrations/illustrationHeader.astro';
+import IllustrationGrid from '@src/components/illustrations/IllustrationGrid.astro';
+
+const pageTitle = "JMS Illustrations | Our Gallery";
+const pageDescription = "Browse our collection of illustrations. Get inspired by our designs and artwork.";
+const sectionTitle = "Nuestra Galería de Ilustraciones";
+const sectionDescription = "Explora nuestra colección de ilustraciones. Cada pieza muestra nuestra creatividad y atención al detalle.";
+
+// Data for illustrations
+let illustrations: Illustration[] = [];
+let error = null;
+
+try {
+    const illustrationsResponse = await fetchApi<{
+        data: Illustration[];
+    }>({
+        endpoint: 'illustrations',
+        query: {
+            'populate': 'image',
+        },
+    });
+
+    if (illustrationsResponse?.data) {
+        illustrations = illustrationsResponse.data;
+    }
+} catch (e) {
+    console.error('Error fetching illustrations data:', e);
+    error = e instanceof Error ? e.message : 'Error desconocido al cargar datos';
+}
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+    <main class="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 pt-[72px] sm:pt-[88px]">
+        <section class="container mx-auto px-4 py-12">
+            <IllustrationHeader title={sectionTitle} description={sectionDescription} />
+            
+            {error && (
+                <div class="bg-red-50 border border-red-200 text-red-800 rounded-lg p-4 mb-8">
+                    <h3 class="font-bold text-lg mb-2">Error al cargar ilustraciones</h3>
+                    <p>{error}</p>
+                </div>
+            )}
+
+            <IllustrationGrid illustrations={illustrations} error={error} />
+        </section>
+    </main>
+</Layout>
