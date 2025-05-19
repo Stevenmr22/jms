@@ -1,13 +1,14 @@
 ---
+import { Image } from 'astro:assets';
 ---
 
 <section class="w-full">
     <div class="grid md:grid-cols-2 gap-8">
       <div class="contact-form">
         <h1 class="text-4xl mb-4">Contáctanos</h1>
-        <p class="mb-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        
+        <p class="mb-6">Estamos aquí para ayudarte con cualquier consulta sobre nuestros productos y servicios. Contáctanos para obtener información sobre precios, disponibilidad o programar una visita a nuestra tienda.</p>        
         <form name="contact" method="POST" class="space-y-6" data-netlify="true" action="/thanks">
+          <!-- Form fields remain unchanged -->
           <div>
             <label for="name" class="block mb-2">Nombre</label>
             <input 
@@ -55,7 +56,13 @@
       
       <div class="flex items-center justify-center h-full min-h-[400px]">
         <div class="flex items-center justify-center">
-          <img src="/img/hero/Frente.png" alt="Frente" class="w-full h-auto">
+          <Image 
+            src="/img/hero/hero-frente.webp"
+            alt="Frente" 
+            class="w-full h-auto"
+            width={600}
+            height={400}
+          />
         </div>
       </div>
     </div>
