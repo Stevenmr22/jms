@@ -1,15 +1,13 @@
 export const categoryDisplayMap: Record<string, string> = {
-	banos: 'Baños',
-	interior: 'Interior',
-	exterior: 'Exterior',
-	revestimiento: 'Revestimiento de Paredes',
+	banos : 'Baños',
+	cocina : 'Cocina',
+	'ceramica-porcelanato': 'Cerámica y Porcelanato',
+	revestimientos: 'Revestimientos',
 	griferia: 'Grifería',
-	ladrillos: 'Ladrillo',
-	'adhesivos-derretidos': 'Adhesivos y Derretidos',
-	mamparas: 'Mamparas',
-	'puertas-ventanas': 'Puertas y Ventanas',
-	fregaderos: 'Fregaderos',
+	'mamparas-puertas-ventanas': 'Mamparas puertas y ventanas',
+	otros: 'Otros',
 };
+
 export function getDisplayCategoryName(categoryName: string): string {
 	const normalizedName = categoryName.toLowerCase();
 	return categoryDisplayMap[normalizedName] || categoryName;
