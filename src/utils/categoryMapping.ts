@@ -1,6 +1,6 @@
 export const categoryDisplayMap: Record<string, string> = {
-	banos : 'Baños',
-	cocina : 'Cocina',
+	banos: 'Baños',
+	cocina: 'Cocina',
 	'ceramica-porcelanato': 'Cerámica y Porcelanato',
 	revestimientos: 'Revestimientos',
 	griferia: 'Grifería',
