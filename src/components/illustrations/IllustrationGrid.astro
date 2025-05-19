@@ -1,36 +1,36 @@
 ---
-import type Illustration from '@interfaces/illustration';
 import { Image } from 'astro:assets';
+import type Illustration from '@interfaces/illustration';
 
 const { illustrations, error } = Astro.props;
 
 function getImageUrl(illustration: Illustration): string {
-    if (
-        illustration.image &&
-        Array.isArray(illustration.image) &&
-        illustration.image.length > 0
-    ) {
-        const firstImage = illustration.image[0];
-        if (firstImage.formats?.large) {
-            const url = firstImage.formats.large.url;
-            if (url.startsWith('http')) {
-                return url;
-            }
-            return import.meta.env.STRAPI_URL
-                ? `${import.meta.env.STRAPI_URL.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`
-                : url;
-        }
-        if (firstImage.url) {
-            const url = firstImage.url;
-            if (url.startsWith('http')) {
-                return url;
-            }
-            return import.meta.env.STRAPI_URL
-                ? `${import.meta.env.STRAPI_URL.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`
-                : url;
-        }
-    }
-    return '/images/placeholder-product.jpg';
+	if (
+		illustration.image &&
+		Array.isArray(illustration.image) &&
+		illustration.image.length > 0
+	) {
+		const firstImage = illustration.image[0];
+		if (firstImage.formats?.large) {
+			const url = firstImage.formats.large.url;
+			if (url.startsWith('http')) {
+				return url;
+			}
+			return import.meta.env.STRAPI_URL
+				? `${import.meta.env.STRAPI_URL.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`
+				: url;
+		}
+		if (firstImage.url) {
+			const url = firstImage.url;
+			if (url.startsWith('http')) {
+				return url;
+			}
+			return import.meta.env.STRAPI_URL
+				? `${import.meta.env.STRAPI_URL.replace(/\/$/, '')}${url.startsWith('/') ? '' : '/'}${url}`
+				: url;
+		}
+	}
+	return '/images/placeholder-product.jpg';
 }
 ---
 
