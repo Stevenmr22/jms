@@ -1,36 +1,38 @@
 ---
 import Layout from '@layouts/Layout.astro';
 import '../styles/global.css';
-import fetchApi from '../lib/strapi';
 import type Illustration from '@interfaces/illustration';
-import IllustrationHeader from '@src/components/illustrations/illustrationHeader.astro';
 import IllustrationGrid from '@src/components/illustrations/IllustrationGrid.astro';
+import IllustrationHeader from '@src/components/illustrations/illustrationHeader.astro';
+import fetchApi from '../lib/strapi';
 
-const pageTitle = "JMS Illustrations | Our Gallery";
-const pageDescription = "Browse our collection of illustrations. Get inspired by our designs and artwork.";
-const sectionTitle = "Nuestra Galería de Ilustraciones";
-const sectionDescription = "Explora nuestra colección de ilustraciones. Cada pieza muestra nuestra creatividad y atención al detalle.";
+const pageTitle = 'JMS Illustrations | Our Gallery';
+const pageDescription =
+	'Browse our collection of illustrations. Get inspired by our designs and artwork.';
+const sectionTitle = 'Nuestra Galería de Ilustraciones';
+const sectionDescription =
+	'Explora nuestra colección de ilustraciones. Cada pieza muestra nuestra creatividad y atención al detalle.';
 
 // Data for illustrations
 let illustrations: Illustration[] = [];
 let error = null;
 
 try {
-    const illustrationsResponse = await fetchApi<{
-        data: Illustration[];
-    }>({
-        endpoint: 'illustrations',
-        query: {
-            'populate': 'image',
-        },
-    });
+	const illustrationsResponse = await fetchApi<{
+		data: Illustration[];
+	}>({
+		endpoint: 'illustrations',
+		query: {
+			populate: 'image',
+		},
+	});
 
-    if (illustrationsResponse?.data) {
-        illustrations = illustrationsResponse.data;
-    }
+	if (illustrationsResponse?.data) {
+		illustrations = illustrationsResponse.data;
+	}
 } catch (e) {
-    console.error('Error fetching illustrations data:', e);
-    error = e instanceof Error ? e.message : 'Error desconocido al cargar datos';
+	console.error('Error fetching illustrations data:', e);
+	error = e instanceof Error ? e.message : 'Error desconocido al cargar datos';
 }
 ---
 

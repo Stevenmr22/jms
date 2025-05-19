@@ -1,3 +1,3 @@
 export default interface Illustration {
-    image?: string;
+	image?: string;
 }
